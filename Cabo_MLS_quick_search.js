@@ -1,7 +1,7 @@
 /**
 Plugin Name: Quick Home Search Widget for flexIDX
 Plugin URI: http://SimpleRealtyTheme.com
-Description: This code places an HTML form widget with selection of cities, price range, property types, bedrooms and bathrooms. On submission it redirects to the flexIDX search page, which returns listings matching selected parameters. This widget is intended for real estate websites that using flexIDX service (http://flexmls.com).
+Description: This code places an HTML form widget with selection of zone, price range, property types, bedrooms and bathrooms. On submission it redirects to the flexIDX search page, which returns listings matching selected parameters. This widget is intended for real estate websites that using flexIDX service (http://flexmls.com).
 Author: Max Chirkov
 Author URI: http://SimpleRealtyTheme.com
 Version: 1.0
@@ -22,7 +22,7 @@ Version: 1.0
 
 /***** REQUIRED SETTINGS *****/
 
-var qs_base_url = ''; //flexIDX URL
+var qs_base_url = 'http://link.flexmls.com/12gihew3pnxc,12'; //flexIDX URL
 
 
 /***** OPTIONAL SETTINGS - ADVANCED USERS ONLY *****/
@@ -32,7 +32,7 @@ var qs_base_url = ''; //flexIDX URL
  *  For details see: http://www.flexmls.com/developers/idx-api/smart-frame-api/
  *  The default field names are taken from Arizona Regional Multiple Listings Service (ARMLS)
  */
-// var cities_field		= ''; //Default => city
+// var zone_field		= ''; //Default => zone
 // var price_field		= ''; //Default => list_price
 // var proptypes_field	= ''; //Default => DwellingType
 // var br_field			= ''; //Default => total_br
@@ -43,7 +43,7 @@ var qs_base_url = ''; //flexIDX URL
  *  @param = string 
  *  Text labels visible to users to identify the fields.
  */
-// var cities_label		= '';
+// var zone_label		= '';
 // var price_label		= '';
 // var proptypes_label	= '';
 // var br_label			= '';
@@ -52,10 +52,10 @@ var qs_base_url = ''; //flexIDX URL
 
 /** Field Values 
  *  @param = associative array {"key" : "value"} 
- *  Example: var cities_values = {"A" : "San Diego", "B" : "San Fancisco"};
+ *  Example: var zone_values = {"A" : "San Diego", "B" : "San Fancisco"};
  *  If keys are the same as values, enter them the same way.
  */ 
-// var cities_values	= {}; 
+// var zone_values	= {}; 
 // var price_values		= {};
 // var proptypes_values	= {};
 // var br_values		= {};
@@ -105,14 +105,14 @@ function qs_field(){
 	this.field = qs_field_output;
 }
 
-var cities_obj = new qs_field();
+var zone_obj = new qs_field();
 var proptypes_obj = new qs_field();
 var price_obj = new qs_field();
 var br_obj = new qs_field();
 var ba_obj = new qs_field();
 
-cities_obj.name = (typeof (cities_field) === "undefined") ? 'city' : cities_field; 
-cities_obj.label = (typeof (cities_label) === "undefined") ? 'Select City' : cities_label; 	
+zone_obj.name = (typeof (zone_field) === "undefined") ? 'zone' : zone_field; 
+zone_obj.label = (typeof (zone_label) === "undefined") ? 'Select Zone' : zone_label; 	
 price_obj.name = (typeof (price_field) === "undefined") ? 'list_price' : price_field; 
 price_obj.label = (typeof (price_label) === "undefined") ? 'What is your price range?' : price_label; 	
 proptypes_obj.name = (typeof (proptypes_field) === "undefined") ? 'DwellingType' : proptypes_field; 
@@ -122,34 +122,16 @@ br_obj.label = (typeof (br_label) === "undefined") ? '# Beds' : br_label;
 ba_obj.name = (typeof (ba_field) === "undefined") ? 'total_bath' : ba_field; 
 ba_obj.label = (typeof (ba_label) === "undefined") ? '# Baths' : ba_label;	
 
-cities_obj.values = (typeof (cities_values) === "undefined") ?
-	cities_obj.values = {
-		"Apache Junction" : "Apache Junction",
-		"Avondale" : "Avondale",
-		"Carefree" : "Carefree",
-		"Cave Creek" : "Cave Creek",
-		"Chandler" : "Chandler",
-		"El Mirage" : "El Mirage",
-		"Fountain Hills" : "Fountain Hills",
-		"Gilbert" : "Gilbert",
-		"Glendale" : "Glendale",
-		"Goodyear" : "Goodyear",
-		"Laveen" : "Laveen",
-		"Litchfield Park" : "Litchfield Park",
-		"Maricopa" : "Maricopa",
-		"Mesa" : "Mesa",
-		"Paradise Valley" : "Paradise Valley",
-		"Peoria" : "Peoria",
-		"Phoenix" : "Phoenix",
-		"Queen Creek" : "Queen Creek",
-		"Rio Verde" : "Rio Verde",
-		"Scottsdale" : "Scottsdale",
-		"Sun City" : "Sun City",
-		"Sun City West" : "Sun City West",
-		"Surprise" : "Surprise",
-		"Tempe" : "Tempe",
-		"Tolleson" : "Tolleson"	
-	} : cities_values;
+zone_obj.values = (typeof (zone_values) === "undefined") ?
+	zone_obj.values = {
+		"Cabo Corridor" : "Cabo Corridor",
+		"Cabo San Lucas" : "Cabo San Lucas",
+		"East Cape" : "East Cape",
+		"Pacific" : "Pacific",
+		"San Jose Corridor" : "San Jose Corridor",
+		"San Jose Del Cabo" : "San Jose Del Cabo",
+		
+	} : zone_values;
 	
 	
 price_obj.values = (typeof (price_values) === "undefined") ?
@@ -235,9 +217,9 @@ price_max_obj.values = {
 
 proptypes_obj.values = (typeof (proptypes_values) === "undefined") ?
 	proptypes_obj.values = {
-		"SF,PH" : "Single Family Homes",
-		"TH,AF" : "Condos/Townhomes",
-		"LS" : "Loft Style"
+		"SF,PH" : "Single Family Home",
+		"TH,AF" : "Condominium",
+		"LS" : "Land"
 	} : proptypes_values;
 
 
@@ -277,11 +259,11 @@ if(!qs_title)
 var qs_search = '<input id="qs_search" type="button" value="Search Now" />';
 var qs_adv_search = '<input id="qs_adv_search" type="button" value="Advanced Search" />';
 if(!qs_price_range){
-	var qs_fields = [cities_obj.name, price_min_obj.name, price_max_obj.name, proptypes_obj.name, br_obj.name, ba_obj.name];	
-	var qs_content = qs_title + cities_obj.field() + price_min_obj.field() + price_max_obj.field() + proptypes_obj.field() + br_obj.field() + ba_obj.field() + qs_search;
+	var qs_fields = [zone_obj.name, price_min_obj.name, price_max_obj.name, proptypes_obj.name, br_obj.name, ba_obj.name];	
+	var qs_content = qs_title + zone_obj.field() + price_min_obj.field() + price_max_obj.field() + proptypes_obj.field() + br_obj.field() + ba_obj.field() + qs_search;
 }else{
-	var qs_fields = [cities_obj.name, price_obj.name, proptypes_obj.name, br_obj.name, ba_obj.name];	
-	var qs_content = qs_title + cities_obj.field() + price_obj.field() + proptypes_obj.field() + br_obj.field() + ba_obj.field() + qs_search;
+	var qs_fields = [zone_obj.name, price_obj.name, proptypes_obj.name, br_obj.name, ba_obj.name];	
+	var qs_content = qs_title + zone_obj.field() + price_obj.field() + proptypes_obj.field() + br_obj.field() + ba_obj.field() + qs_search;
 }
 if(qs_advanced_search == 1){
 	qs_content = qs_content + qs_adv_search;
